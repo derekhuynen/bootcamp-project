@@ -50,13 +50,18 @@ function PMI(downPayment, propertyAmount){
     }
 
 
-   function yearlyPaymentCalc(propertyAmount, salary){
-        const pmi = PMI(1000, 10000)
-
+   function yearlyPaymentCalc(pmi, propertyAmount, salary){
+        console.log("PMI: ", pmi)
+        console.log("ProperAmount: ", propertyAmount)
+        console.log("Salary:", salary)
 
         //Total Yearly Payment
         const total = (pmi * 12) + obj.PropertyInsurance + (propertyAmount * obj.PropertyTax)
+        console.log("Total:",total)
+        
 
+        
+        //console.log("Qualify:" ,temp)
         return (salary * obj.QualifyingPerc > total)
     }
 
