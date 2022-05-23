@@ -19,8 +19,6 @@ function PMI(adminValues,downPayment, propertyAmount){
 
 
    function interestRateCalc(adminValues,creditScore, downPayment, propertyAmount){
-
-
         //If you dont put 20% down you get 1% penalty
         let downPenalty = 0.00
         let loanAmount = propertyAmount - downPayment; 
@@ -33,16 +31,15 @@ function PMI(adminValues,downPayment, propertyAmount){
             return adminValues.interestRate + downPenalty
         }
 
-
         let creditAdditionalRate = Math.ceil((750 - creditScore) / 50)* .0025; 
-
-
         return adminValues.interestRate + creditAdditionalRate + downPenalty;
-
     }
 
 
-   function yearlyPaymentCalc(adminValues, pmi, propertyAmount, salary){
+   function yearlyPaymentCalc(adminValues, pmi, propertyAmount, salary ){
+
+        
+
         console.log("PMI: ", pmi)
         console.log("ProperAmount: ", propertyAmount)
         console.log("Salary:", salary)

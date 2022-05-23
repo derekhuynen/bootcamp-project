@@ -16,7 +16,15 @@ const obj = {
 
 
 //Dispaly Calculation
-let displayData = (data,loanAmount,rate,monthly,qualified) => {
+let displayData = (adminValues,data,loanAmount,rate,monthly,qualified) => {
+
+  const yearlyLoanCost = (monthly * 12)
+  const yearlyPropertyTax = (data.propertyAmount * adminValues.propertyTax)
+  const yearlyPropertyInsurance = adminValues.propertyInsurance;
+  
+  const yearlyTotal = yearlyLoanCost + yearlyPropertyTax + yearlyPropertyInsurance
+
+
   return (
     <div>
     {qualified ?
@@ -28,19 +36,21 @@ let displayData = (data,loanAmount,rate,monthly,qualified) => {
 
       <h1>Monthly: </h1>
       <h3>Payment: ${monthly.toFixed(2)}</h3>
-      <h3>Taxes: ${((data.propertyAmount * obj.PropertyTax)/12).toFixed(2)}</h3>
-      <h3>Insurance: ${(obj.PropertyInsurance/12).toFixed(2)}</h3>
+      <h3>Taxes: ${((data.propertyAmount * adminValues.propertyTax)/12).toFixed(2)}</h3>
+      <h3>Insurance: ${(adminValues.propertyInsurance/12).toFixed(2)}</h3>
 
 
       <h1>Yearly: </h1>
       <h3>Payment: ${(monthly*12).toFixed(2)}</h3>
-      <h3>Taxes: ${(data.propertyAmount * obj.PropertyTax).toFixed(2)}</h3>
-      <h3>Insurance: ${obj.PropertyInsurance.toFixed(2)}</h3>
+      <h3>Taxes: ${(data.propertyAmount * adminValues.propertyTax).toFixed(2)}</h3>
+      <h3>Insurance: ${adminValues.propertyInsurance.toFixed(2)}</h3>
   </div>
   : <div>
     
     <h1>You Didn't Qualify</h1>
-    <h3>{((((monthly * 12) + obj.PropertyInsurance + (data.propertyAmount * obj.PropertyTax))/data.salary)*100).toFixed(2)}%</h3>
+    <h3>Loan Cost Per Year: ${yearlyTotal.toFixed(2)}</h3>
+    <h3>Your Salary: ${data.salary}</h3>
+    <h3>You Need to make: ${(yearlyTotal/.33).toFixed(2)}</h3>
     </div>}
   </div>
   )
@@ -94,6 +104,12 @@ export default function Form() {
   }
 
 
+  const onClick = (user) =>{
+    fetch("http://localhost:5000/loan/" + user.id,
+        { method: 'DELETE' })
+        .then(()=> getLoans())
+}
+
   function post(data){
     const requestOptions = {
       method: 'POST',
@@ -121,6 +137,7 @@ export default function Form() {
     //this is good
     setData(data);
 
+    console.log(adminValues);
     setLoanAmount(data.propertyAmount - data.downPayment);
 
     //Calclate interest Rate
@@ -133,11 +150,13 @@ export default function Form() {
 
     setRate(newInterestRate);
 
+    
+    const pmi = PMI(adminValues, data.downPayment, data.propertyAmount);
+    console.log("PMI Main: " , pmi)
     //calcualte Monthly 
-    setMonthly(PMI(adminValues, data.downPayment, data.propertyAmount))
+    setMonthly(pmi)
 
-    //
-    setQualified(yearlyPaymentCalc(adminValues,monthly,data.propertyAmount, data.salary))
+    setQualified(yearlyPaymentCalc(adminValues, pmi, data.propertyAmount, data.salary))
 
     
     post(data);
@@ -153,7 +172,7 @@ export default function Form() {
         <div className="data_entry">
           <label>
             Enter First Name:
-            <input type="text" value={"Derek"}{...register("firstName", { required: true })} />
+            <input type="text"{...register("firstName", { required: true })} />
             {errors.firstName?.type === "required" && "First name is required"}
           </label>
         </div>
@@ -161,7 +180,7 @@ export default function Form() {
         <div>
           <label>
             Enter Last Name:
-            <input type="text" value={"Huynen"}{...register("lastName", { required: true })} />
+            <input type="text"{...register("lastName", { required: true })} />
             {errors.lastName?.type === "required" && "Last Name is required"}
           </label>
         </div>
@@ -171,7 +190,6 @@ export default function Form() {
             Credit Score:
             <input
               type="number"
-              value="700"
               {...register("creditScore", { required: true, min: 500 })}
             />
             {errors.creditScore?.type === "required" &&
@@ -184,17 +202,8 @@ export default function Form() {
         <div>
           <label>
             Salary:
-            <input type="number" value={500000}{...register("salary", { required: true })} />
+            <input type="number"{...register("salary", { required: true })} />
             {errors.salary?.type === "required" && "Salary Score is required"}
-          </label>
-        </div>
-
-        <div>
-          <label>
-            Property Address:
-            <input type="text" 
-            value={"1123 Street"}{...register("address", { required: true })} />
-            {errors.address?.type === "required" && "Credit Score is required"}
           </label>
         </div>
 
@@ -203,7 +212,6 @@ export default function Form() {
             Property Amount:
             <input
               type="number"
-              value="500000"
               {...register("propertyAmount", { required: true, min: 200000, max: 10000000})}
             />
             {errors.propertyAmount?.type === "required" && "Property Amount is Required"}
@@ -217,7 +225,6 @@ export default function Form() {
             Money Down:
             <input
               type="number"
-              value="700"
               {...register("downPayment", { required: true })}
             />
           </label>
@@ -233,12 +240,42 @@ export default function Form() {
             </select>
           </label>
         </div>
+
+      <h3>Address:</h3>
+
+      <div>
+          <label>
+            Street:
+            <input type="text" 
+            {...register("street", { required: true })} />
+            {errors.street?.type === "required" && "Credit Score is required"}
+          </label>
+        </div>
+
+        <div>
+          <label>
+            City:
+            <input type="text" 
+            {...register("city", { required: true })} />
+            {errors.city?.type === "required" && "Credit Score is required"}
+          </label>
+        </div>
+
+        <div>
+          <label>
+            Zip Code:
+            <input type="text" 
+            {...register("zip", { required: true })} />
+            {errors.zip?.type === "required" && "Credit Score is required"}
+          </label>
+        </div>
+
         <input type="submit" />
       </form>
 
 
       Loan Amount: {loanAmount}
-      {load? displayData(data,loanAmount,rate,monthly,qualified) : null}
+      {load? displayData(adminValues,data,loanAmount,rate,monthly,qualified) : null}
 
 
       <div>
@@ -249,6 +286,7 @@ export default function Form() {
                     <div key={index}>
                         {loan.id}
                         {loan.firstName}
+                        <button onClick={()=> onClick(loan)}>Delete</button>
                     </div>
                 )
             })}
