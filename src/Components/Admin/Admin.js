@@ -41,93 +41,79 @@ export default function Admin() {
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setInputs(values => ({...values, [name]: value}))
-  }
+    setInputs((values) => ({ ...values, [name]: value }));
+    console.log(inputs);
+  };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-  const handleSubmit = (data) => {
-      data.prevenetDefault();
-    // const obj = {
-    //   id: 1,
-    //   propertyTax: data.propertyTax,
-    //   propertyInsurance: data.propertyInsurance,
-    //   interestRate: data.interestRate,
-    //   qualifyingPercent: data.qualifyingPercent,
-    // };
+    const obj = {
+        id: 1,
+        propertyTax: 0, 
+        propertyInsurance: 0, 
+        interestRate: 0, 
+        qualifyingPercent: 0
 
-    // //put(obj);
-    console.log("Data: ", data);
+    }
+    console.log(inputs);
   };
 
   return (
     <>
       <h1> Admin Page</h1>
-
       <div>
-        Loans:
-        {!adminValues ? (
-          "Loading..."
-        ) : (
+        <form onSubmit={handleSubmit}>
           <div>
-            {/* <div>
-              <div>{`Property Tax: ${values.propertyTax}`}</div>
-              <div>{`Property Insurance: ${values.propertyInsurance}`}</div>
-              <div>{`Interest Rate: ${values.interestRate}\n`}</div>
-              <div>{`Qualifying Percent: ${values.qualifyingPercent}\n`}</div>
-            </div> */}
-
-
-            <form onSubmit={handleSubmit}>
-              <div className="data_entry">
-                <label>Property Tax:
-                <input
-                  type="number"
-                  name = "propertyTax"
-                  value={inputs.propertyTax || ""} 
-                  onChange={handleChange}
-                />
-                </label>
-              </div>
-
-              <div className="data_entry">
-                <label>Property Insurance:</label>
-                <input
-                  type="number"
-                  name = "propertyInsurance"
-                  value={inputs.propertyInsurance || ""} 
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="data_entry">
-                <label>Interest Rate:</label>
-                <input
-                  type="number"
-                  name = "interestRate"
-                  value={inputs.interestRate || ""} 
-                  onChange={handleChange}
-                />
-
-              </div>
-
-              <div className="data_entry">
-                <label>Qualifying Percent:</label>
-                <input
-                  type="number"
-                  name="qualifyingPercent"
-                  value={inputs.qualifyingPercent || ""} 
-                  onChange={handleChange}
-                />
-
-              </div>
-
-              <input type="submit" />
-            </form>
-
-            
-
+            <label>
+              PropertyTax:
+              <input
+                type="number"
+                name="propertyTax"
+                value={inputs.propertyTax || ""}
+                onChange={handleChange}
+              />
+            </label>
           </div>
-        )}
+
+          <div>
+            <label>
+              PropertyInsurance:
+              <input
+                type="number"
+                name="propertyInsurance"
+                value={inputs.propertyInsurance || ""}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              InterestRate:
+              <input
+                type="number"
+                name="interestRate"
+                value={inputs.interestRate || ""}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Qualifying Percent:
+              <input
+                type="number"
+                name="qualifyPercent"
+                value={inputs.qualifyPercent || ""}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+
+          <input type="submit" />
+        </form>
       </div>
     </>
   );
