@@ -6,6 +6,7 @@ import {
   interestRateCalc,
 } from "../Calculation/Calculations.js";
 
+//Get Rid of
 const obj = {
   PropertyTax: 0.012,
   PropertyInsurance: 1500,
@@ -14,7 +15,7 @@ const obj = {
 };
 
 
-
+//Dispaly Calculation
 let displayData = (data,loanAmount,rate,monthly,qualified) => {
   return (
     <div>
@@ -50,6 +51,7 @@ let displayData = (data,loanAmount,rate,monthly,qualified) => {
 export default function Form() {
   const [data, setData] = useState({});
   const [load, setLoad] = useState(false);
+
   const [loanAmount , setLoanAmount] = useState(0);
   const [rate , setRate] = useState(0);
   const [monthly, setMonthly] = useState(0);
@@ -65,19 +67,14 @@ export default function Form() {
     fetch("http://localhost:5000/values/1")
     .then((res) => res.json())
     .then((data) => {
-
-
       const obj = {
         propertyTax: data.propertyTax/100,
         propertyInsurance: data.propertyInsurance,
         interestRate: data.interestRate/100,
         qualifyingPercent: data.qualifyingPercent/100,
     }
-    console.log(obj)
     setAdminValues(obj)
     })
-    
-      
     .catch(function (error) {
       console.log(error);
     });
@@ -120,7 +117,8 @@ export default function Form() {
   } = useForm();
 
   const onSubmit = (data) => {
-      
+  
+    //this is good
     setData(data);
 
     setLoanAmount(data.propertyAmount - data.downPayment);

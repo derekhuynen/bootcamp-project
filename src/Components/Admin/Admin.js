@@ -1,3 +1,4 @@
+import { editableInputTypes } from "@testing-library/user-event/dist/utils";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -42,7 +43,6 @@ export default function Admin() {
     const name = event.target.name;
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
-    console.log(inputs);
   };
 
   const handleSubmit = (event) => {
@@ -50,18 +50,29 @@ export default function Admin() {
 
     const obj = {
         id: 1,
-        propertyTax: 0, 
-        propertyInsurance: 0, 
-        interestRate: 0, 
-        qualifyingPercent: 0
-
+        propertyTax: inputs.propertyTax, 
+        propertyInsurance: inputs.propertyInsurance, 
+        interestRate: inputs.interestRate, 
+        qualifyingPercent: inputs.qualifyingPercent
     }
-    console.log(inputs);
+
+    put(obj)
+    console.log(obj);
   };
 
   return (
     <>
       <h1> Admin Page</h1>
+
+        <div>
+
+
+
+
+
+            
+        </div>
+      {!adminValues ? "Loading..." : 
       <div>
         <form onSubmit={handleSubmit}>
           <div>
@@ -70,7 +81,7 @@ export default function Admin() {
               <input
                 type="number"
                 name="propertyTax"
-                value={inputs.propertyTax || ""}
+                value={inputs.propertyTax || adminValues.propertyTax}
                 onChange={handleChange}
               />
             </label>
@@ -82,7 +93,7 @@ export default function Admin() {
               <input
                 type="number"
                 name="propertyInsurance"
-                value={inputs.propertyInsurance || ""}
+                value={inputs.propertyInsurance || adminValues.propertyInsurance}
                 onChange={handleChange}
               />
             </label>
@@ -94,7 +105,7 @@ export default function Admin() {
               <input
                 type="number"
                 name="interestRate"
-                value={inputs.interestRate || ""}
+                value={inputs.interestRate || adminValues.interestRate}
                 onChange={handleChange}
               />
             </label>
@@ -105,8 +116,8 @@ export default function Admin() {
               Qualifying Percent:
               <input
                 type="number"
-                name="qualifyPercent"
-                value={inputs.qualifyPercent || ""}
+                name="qualifyingPercent"
+                value={inputs.qualifyingPercent || adminValues.qualifyingPercent}
                 onChange={handleChange}
               />
             </label>
@@ -115,6 +126,7 @@ export default function Admin() {
           <input type="submit" />
         </form>
       </div>
+}
     </>
   );
 }
