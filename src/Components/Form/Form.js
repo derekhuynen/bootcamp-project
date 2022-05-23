@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   PMI,
@@ -53,8 +53,65 @@ export default function Form() {
   const [loanAmount , setLoanAmount] = useState(0);
   const [rate , setRate] = useState(0);
   const [monthly, setMonthly] = useState(0);
+  const [adminValues, setAdminValues] = useState(null);
   const [qualified, setQualified] = useState(false);
 
+  const [loans, setLoans] = useState(null);
+
+
+  useEffect(()=>{
+    getLoans();
+
+    fetch("http://localhost:5000/values/1")
+    .then((res) => res.json())
+    .then((data) => {
+
+
+      const obj = {
+        propertyTax: data.propertyTax/100,
+        propertyInsurance: data.propertyInsurance,
+        interestRate: data.interestRate/100,
+        qualifyingPercent: data.qualifyingPercent/100,
+    }
+    console.log(obj)
+    setAdminValues(obj)
+    })
+    
+      
+    .catch(function (error) {
+      console.log(error);
+    });
+  },[])
+
+
+  function getLoans(){
+    fetch("http://localhost:5000/loan")
+        .then(res =>
+            res.json()
+        ).then(data => 
+          setLoans(data)
+        )
+        .catch(function (error) {
+            console.log(error);
+        })
+  }
+
+
+  function post(data){
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+  };
+  fetch("http://localhost:5000/loan", requestOptions)
+      .then(response =>
+          response.json()
+      )
+      .then(()=> {
+          getLoans()
+      });
+  }
+  
 
   const {
     register,
@@ -64,28 +121,33 @@ export default function Form() {
 
   const onSubmit = (data) => {
       
-    console.log(data)
-
     setData(data);
 
-    setLoanAmount(data.propertyAmount - data.moneyDown);
+    setLoanAmount(data.propertyAmount - data.downPayment);
 
     //Calclate interest Rate
     const newInterestRate = interestRateCalc(
+      adminValues,
       data.creditScore,
-      data.moneyDown,
+      data.downPayment,
       data.propertyAmount
     );
+
     setRate(newInterestRate);
 
     //calcualte Monthly 
-    setMonthly(PMI(data.moneyDown, data.propertyAmount))
+    setMonthly(PMI(adminValues, data.downPayment, data.propertyAmount))
 
     //
-    setQualified(yearlyPaymentCalc(monthly,data.propertyAmount, data.salary))
+    setQualified(yearlyPaymentCalc(adminValues,monthly,data.propertyAmount, data.salary))
 
+    
+    post(data);
     setLoad(true);
   };
+
+
+
 
   return (
     <>
@@ -124,7 +186,7 @@ export default function Form() {
         <div>
           <label>
             Salary:
-            <input type="number" value={50000}{...register("salary", { required: true })} />
+            <input type="number" value={500000}{...register("salary", { required: true })} />
             {errors.salary?.type === "required" && "Salary Score is required"}
           </label>
         </div>
@@ -158,7 +220,7 @@ export default function Form() {
             <input
               type="number"
               value="700"
-              {...register("moneyDown", { required: true })}
+              {...register("downPayment", { required: true })}
             />
           </label>
         </div>
@@ -179,6 +241,20 @@ export default function Form() {
 
       Loan Amount: {loanAmount}
       {load? displayData(data,loanAmount,rate,monthly,qualified) : null}
+
+
+      <div>
+            Loans:
+            {!loans ? "Loading..." :
+                loans.map((loan, index)=>{
+                return (
+                    <div key={index}>
+                        {loan.id}
+                        {loan.firstName}
+                    </div>
+                )
+            })}
+        </div>
 
       </>
   );
