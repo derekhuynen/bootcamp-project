@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import './Form.css'
 import {
   PMI,
   yearlyPaymentCalc,
@@ -168,7 +169,8 @@ export default function Form() {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="form_container">
+    <form onSubmit={handleSubmit(onSubmit)}>
         <div className="data_entry">
           <label>
             Enter First Name:
@@ -177,7 +179,7 @@ export default function Form() {
           </label>
         </div>
 
-        <div>
+        <div className="data_entry">
           <label>
             Enter Last Name:
             <input type="text"{...register("lastName", { required: true })} />
@@ -185,7 +187,7 @@ export default function Form() {
           </label>
         </div>
 
-        <div>
+        <div className="data_entry">
           <label>
             Credit Score:
             <input
@@ -199,7 +201,7 @@ export default function Form() {
           </label>
         </div>
 
-        <div>
+        <div className="data_entry">
           <label>
             Salary:
             <input type="number"{...register("salary", { required: true })} />
@@ -207,7 +209,7 @@ export default function Form() {
           </label>
         </div>
 
-        <div>
+        <div className="data_entry">
           <label>
             Property Amount:
             <input
@@ -220,7 +222,7 @@ export default function Form() {
           </label>
         </div>
 
-        <div>
+        <div className="data_entry">
           <label>
             Money Down:
             <input
@@ -230,7 +232,7 @@ export default function Form() {
           </label>
         </div>
 
-        <div>
+        <div className="data_entry">
           <label>
             Loan Term:
             <select>
@@ -273,9 +275,13 @@ export default function Form() {
         <input type="submit" />
       </form>
 
-
-      Loan Amount: {loanAmount}
       {load? displayData(adminValues,data,loanAmount,rate,monthly,qualified) : null}
+    </div>
+      
+
+
+      {/* Loan Amount: {loanAmount} */}
+      
 
 
       <div>

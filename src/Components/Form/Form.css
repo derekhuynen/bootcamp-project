@@ -1,0 +1,22 @@
+.form_container{
+
+    margin: auto;
+    width: 250px;
+    padding: 25px;
+
+    border: 1px red solid;
+}
+
+.data_entry{
+    margin-bottom: 10px;
+
+}
+
+label {
+    display: inline-block;
+    width: 200px;
+    color: #777777;
+  }
+  input {
+    padding: 5px 10px;
+  }

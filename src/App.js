@@ -7,9 +7,9 @@ import Navbar from "./Components/Navbar/Navbar";
 
 function App() {
   return (
-    <>
-    
 
+    
+    <div className="app_container">
     <BrowserRouter>
       <Navbar />
       <Routes>
@@ -17,10 +17,12 @@ function App() {
         <Route path="admin" element={<Admin />}/>
       </Routes>
     </BrowserRouter>
-    </>
-      
+  
 
 
+    </div>
+
+    
   );
 }
 
