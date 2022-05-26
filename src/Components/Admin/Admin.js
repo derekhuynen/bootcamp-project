@@ -63,14 +63,7 @@ export default function Admin() {
   return (
     <>
       <h1> Admin Page</h1>
-
         <div>
-
-
-
-
-
-            
         </div>
       {!adminValues ? "Loading..." : 
       <div>
