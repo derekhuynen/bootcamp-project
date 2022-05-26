@@ -18,7 +18,7 @@ export default function DisplayResult({loanCalculations}){
                         <h3>Property Insurance: ${monthly.propertyInsurance.toFixed(2)}</h3>
                         <h3>Total: ${monthly.total.toFixed(2)}</h3>
 
-                        <h1>Monthly: </h1>
+                        <h1>Yearly: </h1>
                         <h3>Loan Payment: ${yearly.loanPayment.toFixed(2)}</h3>
                         <h3>Property Tax: ${yearly.propertyTax.toFixed(2)}</h3>
                         <h3>Property Insurance: ${yearly.propertyInsurance.toFixed(2)}</h3>

@@ -7,7 +7,7 @@ function calc(adminValues, userInputs) {
 
     const yearly = setValues(
         pmi*12,
-        (userInputs.propertyAmount * adminValues.propertyTax),
+        (userInputs.propertyAmount * (adminValues.propertyTax/100)),
         adminValues.propertyInsurance
     )
     const monthly = setValues(
@@ -33,7 +33,7 @@ function setValues(loanPayment, propertyTax, propertyInsurance){
 }
 
 function PMI(userRate, loanAmount) {
-    const i = userRate / 12; //monthly interest rate
+    const i = (userRate/100) / 12; //monthly interest rate **Maybe /100**
     const n = 30 * 12; //number of payments months
     //return monthly payment
     return loanAmount * i * (Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1);
@@ -61,7 +61,9 @@ function CreditScorePenalty(userInputs){
 }
 
 function didQualify(adminValues, userInputs, yearlyTotal) {
-    return (userInputs.salary * adminValues.qualifyingPercent > yearlyTotal)
+
+    //qualifyingPercent /100.  ie. 33% /100 = .33
+    return ((userInputs.salary * (adminValues.qualifyingPercent/100)) > yearlyTotal)
 }
 
 export {PMI, interestRateCalc, didQualify, calc};
