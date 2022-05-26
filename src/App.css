@@ -1,7 +1,4 @@
 .app_container{
-
   width: 100vw;
-  min-height: 100vh; 
-
-  border: 1px solid red;
+  min-height: 100vh;
 }

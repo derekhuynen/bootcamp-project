@@ -3,13 +3,13 @@ import Form from "../Form/Form";
 import {get} from "../Services";
 import {calc} from "../Calculation/Calculations";
 import DisplayResult from "../DisplayResult/DisplayResult";
+import './Home.css'
 
 
 export default function Home(){
     const [adminValues, setAdminValues] = useState(null)
     const [userInputs, setUserInputs] = useState(null)
     const [loanCalculations, setLoanCalculations] = useState(null)
-    const [loans, setLoans] = useState(null)
 
     useEffect(() =>{
         get(setAdminValues,"/values/1")
@@ -23,19 +23,22 @@ export default function Home(){
         }
     },[userInputs])
 
-
     const onClick = (data) => {
         setUserInputs(data)
     }
 
 
     return(
-        <div>
+        <div className={"home_container"}>
             <h2>Home</h2>
-            <Form onClick={onClick}/>
-            {/*{adminValues ? console.log(adminValues) : "Loading Admin Values..."}*/}
-            {/*{userInputs ? console.log(userInputs) : "Loading User Values..."}*/}
-            {loanCalculations ? <DisplayResult loanCalculations={loanCalculations}/> : "Loading User Values..."}
+            <div className={"home_info"}>
+                <div className={"home_section"}>
+                    <Form onClick={onClick}/>
+                </div>
+                <div className={"home_section"}>
+                    {loanCalculations ? <DisplayResult loanCalculations={loanCalculations}/> : null}
+                </div>
+            </div>
         </div>
     )
 }

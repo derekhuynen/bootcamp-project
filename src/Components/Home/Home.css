@@ -1,0 +1,19 @@
+
+.home_container{
+    width: 550px;
+    margin: auto;
+    padding: 0 15px;
+}
+
+.home_info{
+    width: 100%;
+    display: flex;
+}
+
+.home_section{
+    flex:  0 0 50%;
+}
+
+.border{
+    border: 1px black solid;
+}

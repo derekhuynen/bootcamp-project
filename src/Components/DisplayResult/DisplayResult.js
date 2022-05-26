@@ -1,11 +1,11 @@
 import react from 'react'
-
+import './Displayresult.css'
 
 export default function DisplayResult({loanCalculations}){
         const {userLoan, yearly, monthly} = loanCalculations;
 
         return (
-            <div>
+            <div className={"display_result"}>
                 {userLoan.qualified ?
                     <div>
                         <h1>You Qualified</h1>
